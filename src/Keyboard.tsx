@@ -6,7 +6,10 @@ interface KeyboardProps {
 
 function Keyboard(props: KeyboardProps) {
     const keypressCallback = (key: string) => {
-        new KeyboardEvent('keypress', {key: key})
+        window.dispatchEvent(new KeyboardEvent('keydown', {key: key}))
+        setTimeout(() => {
+            window.dispatchEvent(new KeyboardEvent('keyup', {key: key}))
+        }, 300)
     }
 
     return (

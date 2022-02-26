@@ -6,13 +6,14 @@ function useKeydown(targetKeys: string[], handler: (event: KeyboardEvent) => voi
   useEffect(() => {
     const downHandler = (event: KeyboardEvent) => {
       if (!fired && targetKeys.includes(event.key)) {
-        setFired(true)
         handler(event)
+        setFired(true)
       }
     }
     window.addEventListener("keydown", downHandler);
 
     const upHandler = (event: KeyboardEvent) => {
+      console.log('Up')
       if (targetKeys.includes(event.key)) {
         setFired(false)
       }
@@ -24,7 +25,7 @@ function useKeydown(targetKeys: string[], handler: (event: KeyboardEvent) => voi
       window.removeEventListener("keydown", downHandler);
       window.removeEventListener("keyup", upHandler);
     };
-  }, [fired, handler, targetKeys]); // Empty array ensures that effect is only run on mount and unmount
+  }, [fired, handler, targetKeys]);
 }
 
 export default useKeydown

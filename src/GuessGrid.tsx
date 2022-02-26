@@ -30,7 +30,7 @@ function GuessRow(props: GuessRowProps) {
     <div className="GuessRow">
       {
         [...Array(props.columns)].map((_, i) => {
-          const letter = props.word?.charAt(i)
+          const letter = props.word !== undefined ? props.word[i] : undefined
           return <GuessLetter letter={letter} />
         })
       }

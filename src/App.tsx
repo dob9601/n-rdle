@@ -10,13 +10,15 @@ export const GuessContext = React.createContext<string[]>([])
 function App() {
   const [guesses, setGuesses] = useState<string[]>([])
 
-  useKeydown([...qwertyLayout.flat()], (event: KeyboardEvent) => {
-    console.log(event.key)
+  useKeydown([...qwertyLayout.flat(), 'Enter', 'Backspace'], (event: KeyboardEvent) => {
+    let lastGuess = guesses[guesses.length - 1]
+
     if (event.key === 'Enter') {
-      // TODO: Special enter key handling
+      if (lastGuess?.length === 5) {
+        // TODO: Special enter key handling
+        setGuesses([...guesses, ""])
+      }
     } else if (event.key === 'Backspace') {
-      console.log('asdas')
-      let lastGuess = guesses[guesses.length - 1]
       if (lastGuess === undefined || lastGuess.length === 0) {
         return
       }
@@ -26,12 +28,8 @@ function App() {
       setGuesses(guesses)
 
     } else {
-      let lastGuess = guesses[guesses.length - 1]
-
       if (lastGuess === undefined) {
-        lastGuess = event.key
-        guesses.push(lastGuess)
-        setGuesses(guesses)
+        setGuesses([...guesses, event.key])
       } else if (lastGuess.length === 5) {
         return
       } else {
