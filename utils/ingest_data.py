@@ -18,7 +18,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         '-r',
         '--length-range',
-        default='3-12',
+        default='3-18',
         help='The range of length of words to consider in the format min-max',
         required=False
     )
@@ -42,7 +42,7 @@ def parse_wordnet_file(file: TextIO) -> dict[int, list[str]]:
 
         word = line.split(' ')[4]
         if is_word_valid(word):
-            words[len(word)].append(word)
+            words[len(word)].append(word.lower())
 
     return words
 
