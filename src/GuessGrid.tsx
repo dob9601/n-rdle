@@ -21,7 +21,7 @@ function GuessGrid(props: GuessGridProps) {
     <div className="GuessGrid">
       {[...Array(props.max_guesses)].map((_, i) => {
         const reveal = i !== guesses.length - 1
-        return <GuessRow correct_word={props.correct_word} word={guesses[i]} reveal={reveal}/>
+        return <GuessRow key={i} correct_word={props.correct_word} word={guesses[i]} reveal={reveal}/>
       })}
     </div>
   )
@@ -49,14 +49,14 @@ function GuessRow(props: GuessRowProps) {
             } else if (letter === props.correct_word[i]) {
               state = LetterState.Correct
             } else if (props.correct_word.includes(letter)) {
-              state = LetterState.Almost
+              state = LetterState.Almost // TODO: Handle repeated letters
             } else {
               state = LetterState.Incorrect
             }
 
-            return <GuessLetter letter={letter} state={state} />
+            return <GuessLetter key={i} letter={letter} state={state} />
           } else {
-            return <GuessLetter letter={letter} state={LetterState.Unconfirmed} />
+            return <GuessLetter key={i} letter={letter} state={LetterState.Unconfirmed} />
           }
         })
       }

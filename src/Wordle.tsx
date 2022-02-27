@@ -16,6 +16,7 @@ function WordleManager(props: WordleManagerProps) {
   const [guesses, setGuesses] = useState<string[]>([])
 
   useKeydown([...qwertyLayout.flat(), 'Enter', 'Backspace'], (event: KeyboardEvent) => {
+    setGuesses(guesses)
     let lastGuess = guesses[guesses.length - 1]
 
     if (event.key === 'Enter') {
@@ -49,7 +50,7 @@ function WordleManager(props: WordleManagerProps) {
 
     <div className="WordleContainer">
       <GuessContext.Provider value={guesses}>
-        {[...Array(props.wordle_count)].map(() => <Wordle max_guesses={props.max_guesses} />)}
+        {[...Array(props.wordle_count)].map((_, i) => <Wordle key={i} max_guesses={props.max_guesses} />)}
       </GuessContext.Provider>
     </div>
   )

@@ -16,17 +16,17 @@ function Keyboard(props: KeyboardProps) {
         <div className="Keyboard">
             {props.layout.map((row, i) => {
                 return (
-                    <div className="keyboardRow">
+                    <div key={i} className="keyboardRow">
                         {
-                            i === props.layout.length - 1 ? <KeyboardLetter style={{width: '60px'}} letter = "⏎" action = "Enter" keypressCallback = {keypressCallback} /> : undefined
+                            i === props.layout.length - 1 ? <KeyboardLetter key="⏎" style={{width: '60px'}} letter = "⏎" action = "Enter" keypressCallback = {keypressCallback} /> : undefined
                         }
                         {
-                            row.map((char) => {
-                                return <KeyboardLetter letter={char} keypressCallback={keypressCallback} />
+                            row.map((char, j) => {
+                                return <KeyboardLetter key={i.toString() + '-' + j.toString()} letter={char} keypressCallback={keypressCallback} />
                             })
                         }
                         {
-                            i === props.layout.length - 1 ? <KeyboardLetter style={{fontSize: '1.3em', width: '60px'}} letter = "⌫" action = "Backspace" keypressCallback = {keypressCallback} /> : undefined
+                            i === props.layout.length - 1 ? <KeyboardLetter key="Backspace" style={{fontSize: '1.3em', width: '60px'}} letter = "⌫" action = "Backspace" keypressCallback = {keypressCallback} /> : undefined
                         }
                     </div>
                 )

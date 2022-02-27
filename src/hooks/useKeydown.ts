@@ -1,21 +1,27 @@
 import {useEffect, useState} from "react";
 
 function useKeydown(targetKeys: string[], handler: (event: KeyboardEvent) => void): void {
-  const [fired, setFired] = useState(false)
+  const [pressedKeys, setPressedKeys] = useState(new Set())
 
   useEffect(() => {
     const downHandler = (event: KeyboardEvent) => {
-      if (!fired && targetKeys.includes(event.key)) {
+      const key = event.key
+
+
+      if (!pressedKeys.has(key) && targetKeys.includes(event.key)) {
         handler(event)
-        setFired(true)
+        setPressedKeys(new Set([...pressedKeys, key]))
       }
     }
     window.addEventListener("keydown", downHandler);
 
     const upHandler = (event: KeyboardEvent) => {
-      console.log('Up')
+      const key = event.key
+
       if (targetKeys.includes(event.key)) {
-        setFired(false)
+        const newPressedKeys = new Set(pressedKeys)
+        newPressedKeys.delete(key)
+        setPressedKeys(newPressedKeys)
       }
     }
     window.addEventListener("keyup", upHandler);
@@ -25,7 +31,7 @@ function useKeydown(targetKeys: string[], handler: (event: KeyboardEvent) => voi
       window.removeEventListener("keydown", downHandler);
       window.removeEventListener("keyup", upHandler);
     };
-  }, [fired, handler, targetKeys]);
+  }, [pressedKeys, handler, targetKeys]);
 }
 
 export default useKeydown
