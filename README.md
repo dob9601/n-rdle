@@ -1,10 +1,12 @@
 # N-RDLE
 
-## Build
+## Update words from WordNet
 1. [Download the latest version of the WordNet database](https://wordnet.princeton.edu/download/current-version)
 2. Run `python3 utils/ingest_data.py -i path/to/database -o public/words`
-3. Run `yarn build`
-4. Deploy with some form of static serving tool.
+
+## Build
+1. Run `yarn build`
+2. Deploy with some form of static serving tool.
 
 ---
 
