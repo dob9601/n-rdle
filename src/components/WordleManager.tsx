@@ -1,21 +1,26 @@
 import React, {useState} from "react"
 import ReactModal from "react-modal"
-import GuessGrid from "./GuessGrid"
-import useKeydown from "./hooks/useKeydown"
-import {qwertyLayout} from "./layouts"
-import "./Wordle.css"
+import useKeydown from "../hooks/useKeydown"
+import {qwertyLayout} from "../layouts"
+import Wordle from "./Wordle"
 
 interface WordleManagerProps {
-    wordle_count: number
-    word_length: number
-    max_guesses: number
+    wordleCount: number
+    wordLength: number
+    maxGuesses: number
 }
 
 export const GuessContext = React.createContext<string[]>([])
 
 function WordleManager(props: WordleManagerProps) {
     const [guesses, setGuesses] = useState<string[]>([])
-    const [gameState, setGameState] = useState<boolean[]>([...Array(props.wordle_count)])
+    const [completedWordles, setCompletedWordles] = useState<Set<number>>(new Set())
+
+    const setGameCompleted = (gameIndex: number) => {
+        const newState = new Set(completedWordles)
+        newState.add(gameIndex)
+        setCompletedWordles(newState)
+    }
 
     useKeydown([...qwertyLayout.flat(), "Enter", "Backspace"], (event: KeyboardEvent) => {
         setGuesses(guesses)
@@ -23,7 +28,6 @@ function WordleManager(props: WordleManagerProps) {
 
         if (event.key === "Enter") {
             if (lastGuess?.length === 5) {
-                // TODO: Special enter key handling
                 setGuesses([...guesses, ""])
             }
         } else if (event.key === "Backspace") {
@@ -50,28 +54,18 @@ function WordleManager(props: WordleManagerProps) {
 
     return (
         <>
-            <ReactModal isOpen={gameState.every(w => w)}>
+            <ReactModal isOpen={completedWordles.size === props.wordleCount}>
                 <p>You win!</p>
+            </ReactModal>
+            <ReactModal isOpen={guesses.length > props.maxGuesses && !(completedWordles.size === props.wordleCount)}>
+                <p>You Lose :(</p>
             </ReactModal>
             <div className="WordleContainer">
                 <GuessContext.Provider value={guesses}>
-                    {[...Array(props.wordle_count)].map((_, i) => <Wordle key={i} max_guesses={props.max_guesses} />)}
+                    {[...Array(props.wordleCount)].map((_, i) => <Wordle key={i} maxGuesses={props.maxGuesses} setCompleted={() => setGameCompleted(i)} completed={completedWordles.has(i)} />)}
                 </GuessContext.Provider>
             </div>
         </>
-    )
-}
-
-interface WordleProps {
-    max_guesses: number;
-}
-
-function Wordle(props: WordleProps) {
-    const correct_word = "wanks" // TODO: Change this
-    return (
-        <div className="Wordle">
-            <GuessGrid max_guesses={props.max_guesses} correct_word={correct_word} />
-        </div>
     )
 }
 

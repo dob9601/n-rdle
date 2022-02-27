@@ -1,44 +1,52 @@
 import React, {useContext} from "react"
 import "./GuessGrid.css"
-import {GuessContext} from "./Wordle"
+import {GuessContext} from "./WordleManager"
 
 enum LetterState {
-  Unconfirmed = "Unconfirmed",
-  Almost = "Almost",
-  Correct = "Correct",
-  Incorrect = "Incorrect",
+    Unconfirmed = "Unconfirmed",
+    Almost = "Almost",
+    Correct = "Correct",
+    Incorrect = "Incorrect",
 }
 
 interface GuessGridProps {
-  max_guesses: number;
-  correct_word: string
+    maxGuesses: number;
+    correctWord: string
 }
 
 function GuessGrid(props: GuessGridProps) {
     const guesses = useContext(GuessContext)
+    const rows = []
+    
+    let correctWordEncountered = false
+    for (let i = 0; i < props.maxGuesses; i++) {
+        const reveal = i !== guesses.length - 1
+        const guessRow = <GuessRow key={i} correctWord={props.correctWord} word={correctWordEncountered ? undefined : guesses[i]} reveal={reveal} />
+        rows.push(guessRow)
+
+        if (guesses[i] === props.correctWord) {
+            correctWordEncountered = true
+        }
+    }
 
     return (
         <div className="GuessGrid">
-            {[...Array(props.max_guesses)].map((_, i) => {
-                const reveal = i !== guesses.length - 1
-                return <GuessRow key={i} correct_word={props.correct_word} word={guesses[i]} reveal={reveal}/>
-            })}
+            {rows}
         </div>
     )
 }
 
 interface GuessRowProps {
-  correct_word: string,
-  word?: string
-  reveal: boolean
+    correctWord: string,
+    word?: string
+    reveal: boolean
 }
 
 function GuessRow(props: GuessRowProps) {
-
     return (
         <div className="GuessRow">
             {
-                [...Array(props.correct_word.length)].map((_, i) => {
+                [...Array(props.correctWord.length)].map((_, i) => {
                     const letter = props.word !== undefined ? props.word[i] : undefined
 
                     if (letter !== undefined) {
@@ -46,9 +54,9 @@ function GuessRow(props: GuessRowProps) {
 
                         if (!props.reveal) {
                             state = LetterState.Unconfirmed
-                        } else if (letter === props.correct_word[i]) {
+                        } else if (letter === props.correctWord[i]) {
                             state = LetterState.Correct
-                        } else if (props.correct_word.includes(letter)) {
+                        } else if (props.correctWord.includes(letter)) {
                             state = LetterState.Almost // TODO: Handle repeated letters
                         } else {
                             state = LetterState.Incorrect
@@ -65,8 +73,8 @@ function GuessRow(props: GuessRowProps) {
 }
 
 interface GuessLetterProps {
-  letter?: string
-  state: LetterState
+    letter?: string
+    state: LetterState
 }
 
 function GuessLetter(props: GuessLetterProps) {
