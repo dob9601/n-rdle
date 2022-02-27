@@ -1,5 +1,6 @@
-import './Keyboard.css'
-import * as CSS from 'csstype'
+import "./Keyboard.css"
+import * as CSS from "csstype"
+import React from "react"
 
 interface KeyboardProps {
     layout: string[][]
@@ -7,9 +8,9 @@ interface KeyboardProps {
 
 function Keyboard(props: KeyboardProps) {
     const keypressCallback = (key: string) => {
-        window.dispatchEvent(new KeyboardEvent('keydown', {key: key}))
+        window.dispatchEvent(new KeyboardEvent("keydown", {key: key}))
         setTimeout(() => {
-            window.dispatchEvent(new KeyboardEvent('keyup', {key: key}))
+            window.dispatchEvent(new KeyboardEvent("keyup", {key: key}))
         }, 300)
     }
     return (
@@ -18,15 +19,15 @@ function Keyboard(props: KeyboardProps) {
                 return (
                     <div key={i} className="keyboardRow">
                         {
-                            i === props.layout.length - 1 ? <KeyboardLetter key="⏎" style={{width: '60px'}} letter = "⏎" action = "Enter" keypressCallback = {keypressCallback} /> : undefined
+                            i === props.layout.length - 1 ? <KeyboardLetter key="⏎" style={{width: "60px"}} letter = "⏎" action = "Enter" keypressCallback = {keypressCallback} /> : undefined
                         }
                         {
                             row.map((char, j) => {
-                                return <KeyboardLetter key={i.toString() + '-' + j.toString()} letter={char} keypressCallback={keypressCallback} />
+                                return <KeyboardLetter key={i.toString() + "-" + j.toString()} letter={char} keypressCallback={keypressCallback} />
                             })
                         }
                         {
-                            i === props.layout.length - 1 ? <KeyboardLetter key="Backspace" style={{fontSize: '1.3em', width: '60px'}} letter = "⌫" action = "Backspace" keypressCallback = {keypressCallback} /> : undefined
+                            i === props.layout.length - 1 ? <KeyboardLetter key="Backspace" style={{fontSize: "1.3em", width: "60px"}} letter = "⌫" action = "Backspace" keypressCallback = {keypressCallback} /> : undefined
                         }
                     </div>
                 )
@@ -53,4 +54,4 @@ function KeyboardLetter(props: KeyboardLetterProps) {
     )
 }
 
-export default Keyboard;
+export default Keyboard
