@@ -1,6 +1,6 @@
 import {useContext} from 'react'
-import {GuessContext} from './App'
 import './GuessGrid.css'
+import {GuessContext} from './Wordle'
 
 enum LetterState {
   Unconfirmed = 'Unconfirmed',
