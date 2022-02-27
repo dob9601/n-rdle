@@ -5,12 +5,13 @@ import {GuessContext} from './Wordle'
 enum LetterState {
   Unconfirmed = 'Unconfirmed',
   Almost = 'Almost',
-  Correct = 'Correct'
+  Correct = 'Correct',
+  Incorrect = 'Incorrect',
 }
 
 interface GuessGridProps {
-  rows: number;
-  columns: number;
+  max_guesses: number;
+  correct_word: string
 }
 
 function GuessGrid(props: GuessGridProps) {
@@ -18,16 +19,18 @@ function GuessGrid(props: GuessGridProps) {
 
   return (
     <div className="GuessGrid">
-      {[...Array(props.rows)].map((_, i) => {
-        return <GuessRow columns={props.columns} word={guesses[i]} />
+      {[...Array(props.max_guesses)].map((_, i) => {
+        const reveal = i !== guesses.length - 1
+        return <GuessRow correct_word={props.correct_word} word={guesses[i]} reveal={reveal}/>
       })}
     </div>
   )
 }
 
 interface GuessRowProps {
-  columns: number,
+  correct_word: string,
   word?: string
+  reveal: boolean
 }
 
 function GuessRow(props: GuessRowProps) {
@@ -35,10 +38,26 @@ function GuessRow(props: GuessRowProps) {
   return (
     <div className="GuessRow">
       {
-        [...Array(props.columns)].map((_, i) => {
+        [...Array(props.correct_word.length)].map((_, i) => {
           const letter = props.word !== undefined ? props.word[i] : undefined
 
-          return <GuessLetter letter={letter} state={LetterState.Unconfirmed} />
+          if (letter !== undefined) {
+            let state;
+
+            if (!props.reveal) {
+              state = LetterState.Unconfirmed
+            } else if (letter === props.correct_word[i]) {
+              state = LetterState.Correct
+            } else if (props.correct_word.includes(letter)) {
+              state = LetterState.Almost
+            } else {
+              state = LetterState.Incorrect
+            }
+
+            return <GuessLetter letter={letter} state={state} />
+          } else {
+            return <GuessLetter letter={letter} state={LetterState.Unconfirmed} />
+          }
         })
       }
     </div>

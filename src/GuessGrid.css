@@ -32,6 +32,12 @@
   color: var(--color-2);
 }
 
+.GuessLetter.Incorrect {
+  border-color: var(--color-3);
+  background-color: var(--color-3);
+  color: var(--color-2);
+}
+
 .GuessRow {
   display: flex;
 }

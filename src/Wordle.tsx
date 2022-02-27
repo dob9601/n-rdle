@@ -4,7 +4,7 @@ import useKeydown from './hooks/useKeydown';
 import {qwertyLayout} from './layouts';
 import './Wordle.css'
 
-interface WordleContainerProps {
+interface WordleManagerProps {
   wordle_count: number
   word_length: number
   max_guesses: number
@@ -12,7 +12,7 @@ interface WordleContainerProps {
 
 export const GuessContext = React.createContext<string[]>([])
 
-function WordleContainer(props: WordleContainerProps) {
+function WordleManager(props: WordleManagerProps) {
   const [guesses, setGuesses] = useState<string[]>([])
 
   useKeydown([...qwertyLayout.flat(), 'Enter', 'Backspace'], (event: KeyboardEvent) => {
@@ -49,23 +49,23 @@ function WordleContainer(props: WordleContainerProps) {
 
     <div className="WordleContainer">
       <GuessContext.Provider value={guesses}>
-        {[...Array(props.wordle_count)].map(() => <Wordle max_guesses={props.max_guesses} letters={props.word_length} />)}
+        {[...Array(props.wordle_count)].map(() => <Wordle max_guesses={props.max_guesses} />)}
       </GuessContext.Provider>
     </div>
   )
 }
 
 interface WordleProps {
-  letters: number;
   max_guesses: number;
 }
 
 function Wordle(props: WordleProps) {
+  const correct_word = "wanks" // TODO: Change this
   return (
     <div className="Wordle">
-      <GuessGrid rows={props.max_guesses} columns={props.letters} />
+      <GuessGrid max_guesses={props.max_guesses} correct_word={correct_word} />
     </div>
   )
 }
 
-export default WordleContainer;
+export default WordleManager;
