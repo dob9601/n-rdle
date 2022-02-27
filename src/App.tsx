@@ -5,6 +5,9 @@ import Keyboard from './Keyboard';
 import {qwertyLayout} from './layouts';
 import Wordle from './Wordle';
 
+const LETTER_COUNT = 5
+const MAX_GUESSES = 10
+
 export const GuessContext = React.createContext<string[]>([])
 
 function App() {
@@ -41,10 +44,32 @@ function App() {
   })
 
   return (
-    <GuessContext.Provider value={guesses}>
-      <Wordle />
-      <Keyboard layout={qwertyLayout} />
-    </GuessContext.Provider>
+    <div className="App">
+      <div className="WordleContainer">
+        <GuessContext.Provider value={guesses}>
+          <Wordle max_guesses={MAX_GUESSES} letters={LETTER_COUNT} />
+          <Wordle max_guesses={MAX_GUESSES} letters={LETTER_COUNT} />
+          <Wordle max_guesses={MAX_GUESSES} letters={LETTER_COUNT} />
+          <Wordle max_guesses={MAX_GUESSES} letters={LETTER_COUNT} />
+          <Wordle max_guesses={MAX_GUESSES} letters={LETTER_COUNT} />
+          <Wordle max_guesses={MAX_GUESSES} letters={LETTER_COUNT} />
+          <Wordle max_guesses={MAX_GUESSES} letters={LETTER_COUNT} />
+          <Wordle max_guesses={MAX_GUESSES} letters={LETTER_COUNT} />
+          <Wordle max_guesses={MAX_GUESSES} letters={LETTER_COUNT} />
+          <Wordle max_guesses={MAX_GUESSES} letters={LETTER_COUNT} />
+          <Wordle max_guesses={MAX_GUESSES} letters={LETTER_COUNT} />
+          <Wordle max_guesses={MAX_GUESSES} letters={LETTER_COUNT} />
+          <Wordle max_guesses={MAX_GUESSES} letters={LETTER_COUNT} />
+          <Wordle max_guesses={MAX_GUESSES} letters={LETTER_COUNT} />
+          <Wordle max_guesses={MAX_GUESSES} letters={LETTER_COUNT} />
+          <Wordle max_guesses={MAX_GUESSES} letters={LETTER_COUNT} />
+          <Wordle max_guesses={MAX_GUESSES} letters={LETTER_COUNT} />
+        </GuessContext.Provider>
+      </div>
+      <div className="KeyboardContainer">
+        <Keyboard layout={qwertyLayout} />
+      </div>
+    </div>
   );
 }
 

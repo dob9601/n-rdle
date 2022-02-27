@@ -2,6 +2,12 @@ import {useContext} from 'react'
 import {GuessContext} from './App'
 import './GuessGrid.css'
 
+enum LetterState {
+  Unconfirmed = 'Unconfirmed',
+  Almost = 'Almost',
+  Correct = 'Correct'
+}
+
 interface GuessGridProps {
   rows: number;
   columns: number;
@@ -31,7 +37,8 @@ function GuessRow(props: GuessRowProps) {
       {
         [...Array(props.columns)].map((_, i) => {
           const letter = props.word !== undefined ? props.word[i] : undefined
-          return <GuessLetter letter={letter} />
+
+          return <GuessLetter letter={letter} state={LetterState.Unconfirmed} />
         })
       }
     </div>
@@ -40,11 +47,12 @@ function GuessRow(props: GuessRowProps) {
 
 interface GuessLetterProps {
   letter?: string
+  state: LetterState
 }
 
 function GuessLetter(props: GuessLetterProps) {
   return (
-    <div className={`GuessLetter ${props.letter !== undefined ? "filled" : "" }`}>
+    <div className={`GuessLetter ${props.state}`}>
       <p>{props.letter}</p>
     </div>
   )

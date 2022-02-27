@@ -1,11 +1,16 @@
 import GuessGrid from './GuessGrid';
 import './Wordle.css'
 
-function Wordle() {
+interface WordleProps {
+  letters: number;
+  max_guesses: number;
+}
+
+function Wordle(props: WordleProps) {
   return (
-    <>
-      <GuessGrid rows={5} columns={5} />
-    </>
+    <div className="Wordle">
+      <GuessGrid rows={props.max_guesses} columns={props.letters} />
+    </div>
   )
 }
 

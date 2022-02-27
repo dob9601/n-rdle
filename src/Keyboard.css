@@ -1,6 +1,6 @@
 .KeyboardLetter {
-  background-color: #818384;
-  color: #fff;
+  background-color: var(--color-3);
+  color: var(--color-2);
 
   border-radius: 8px;
   width: 40px;
@@ -19,7 +19,7 @@
   cursor: pointer;
 }
 
-KeyboardLetter p {
+.KeyboardLetter p {
   margin: 0;
 }
 
