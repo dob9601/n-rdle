@@ -25,6 +25,15 @@
             "error",
             4
         ],
+        "@typescript-eslint/naming-convention": [
+            "error",
+            {
+                "selector": ["property", "parameterProperty", "method", "accessor"],
+                "format": [
+                    "camelCase"
+                ]
+            }
+        ],
         "linebreak-style": [
             "error",
             "unix"
