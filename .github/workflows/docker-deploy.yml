@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -22,10 +22,6 @@ jobs:
           name: ordle-${{ github.sha }}
           path: ./ordle.tar.gz
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
       - name: Retrieve the docker tarball
         uses: actions/download-artifact@v2
         with:
