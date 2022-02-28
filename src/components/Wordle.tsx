@@ -29,4 +29,8 @@ function Wordle(props: WordleProps) {
     )
 }
 
-export default Wordle
+// Only update the component if it isn't already completed and about to go into another
+// completed state
+export default React.memo(Wordle, (prevProps, nextProps) => {
+    return prevProps.completed && nextProps.completed
+})

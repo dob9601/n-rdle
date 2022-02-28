@@ -42,7 +42,7 @@ interface GuessRowProps {
     reveal: boolean
 }
 
-function GuessRow(props: GuessRowProps) {
+function GuessRowInner(props: GuessRowProps) {
     return (
         <div className="GuessRow">
             {
@@ -72,17 +72,21 @@ function GuessRow(props: GuessRowProps) {
     )
 }
 
+const GuessRow = React.memo(GuessRowInner)
+
 interface GuessLetterProps {
     letter?: string
     state: LetterState
 }
 
-function GuessLetter(props: GuessLetterProps) {
+function GuessLetterInner(props: GuessLetterProps) {
     return (
         <div className={`GuessLetter ${props.state}`}>
             <p>{props.letter}</p>
         </div>
     )
 }
+
+const GuessLetter = React.memo(GuessLetterInner)
 
 export default GuessGrid
