@@ -50,7 +50,7 @@ jobs:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
           ssh -o StrictHostKeyChecking=no ordle@${{ secrets.SSH_DEPLOY_HOST }} << EOF \
-          docker load ordle.tar.gz \
+          docker load --input ordle.tar.gz \
           docker kill ordle || true \
           docker run --detach --publish 127.0.0.1:3000:3000 --restart always ordle 
           EOF
