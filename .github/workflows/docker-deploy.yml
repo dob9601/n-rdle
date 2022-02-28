@@ -1,0 +1,48 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the docker image
+        run: docker build --tag ordle .
+
+      - name: Dump the docker image to a tarball
+        run: docker save -o ordle.tar.gz
+
+      - name: Save the tarball as an artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ordle-${GITHUB_SHA}
+          path: ./ordle.tar.gz
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Retrieve the docker tarball
+        uses: actions/download-artifact@v2
+        with:
+          name: ordle-${GITHUB_SHA}
+
+      - name: Setup SSH Keys and known_hosts
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: |
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
+
+      - name: Copy and install the tarball on the remote machine
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: scp ordle-${GITHUB_SHA} ordle@${{ secrets.SSH_DEPLOY_HOST }}:/home/ordle/ordle-${GITHUB_SHA}
+
+      - name: Kill existing ordle service and restart new one
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: ssh ordle@${{ secrets.SSH_DEPLOY_HOST }} "docker load ordle-${GITHUB_SHA}"
