@@ -16,17 +16,6 @@ jobs:
       - name: Dump the docker image to a tarball
         run: docker save -o ordle.tar.gz ordle
 
-      - name: Save the tarball as an artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: ordle-${{ github.sha }}
-          path: ./ordle.tar.gz
-
-      - name: Retrieve the docker tarball
-        uses: actions/download-artifact@v2
-        with:
-          name: ordle-${{ github.sha }}
-
       - name: Setup SSH Keys and known_hosts
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
