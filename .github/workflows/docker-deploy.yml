@@ -23,6 +23,7 @@ jobs:
           path: ./ordle.tar.gz
 
   deploy:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Retrieve the docker tarball
