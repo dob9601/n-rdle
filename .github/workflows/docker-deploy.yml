@@ -19,7 +19,7 @@ jobs:
       - name: Save the tarball as an artifact
         uses: actions/upload-artifact@v2
         with:
-          name: ordle-${GITHUB_SHA}
+          name: ordle-${GITHUB_SHA}.tar.gz
           path: ./ordle.tar.gz
 
   deploy:
@@ -29,7 +29,7 @@ jobs:
       - name: Retrieve the docker tarball
         uses: actions/download-artifact@v2
         with:
-          name: ordle-${GITHUB_SHA}
+          name: ordle-${GITHUB_SHA}.tar.gz
 
       - name: Setup SSH Keys and known_hosts
         env:
@@ -41,9 +41,9 @@ jobs:
       - name: Copy and install the tarball on the remote machine
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-        run: scp -o StrictHostKeyChecking=no ordle-${GITHUB_SHA} ordle@${{ secrets.SSH_DEPLOY_HOST }}:/home/ordle/ordle-${GITHUB_SHA}
+        run: scp -o StrictHostKeyChecking=no ordle-${GITHUB_SHA}.tar.gz ordle@${{ secrets.SSH_DEPLOY_HOST }}:/home/ordle/ordle-${GITHUB_SHA}.tar.gz
 
       - name: Kill existing ordle service and restart new one
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-        run: ssh -o StrictHostKeyChecking=no ordle@${{ secrets.SSH_DEPLOY_HOST }} "docker load ordle-${GITHUB_SHA}"
+        run: ssh -o StrictHostKeyChecking=no ordle@${{ secrets.SSH_DEPLOY_HOST }} "docker load ordle-${GITHUB_SHA}.tar.gz"
