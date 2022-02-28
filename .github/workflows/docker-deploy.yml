@@ -14,7 +14,7 @@ jobs:
         run: docker build --tag ordle .
 
       - name: Dump the docker image to a tarball
-        run: docker save -o ordle.tar.gz
+        run: docker save -o ordle.tar.gz ordle
 
       - name: Save the tarball as an artifact
         uses: actions/upload-artifact@v2
