@@ -27,7 +27,7 @@ function WordleManager(props: WordleManagerProps) {
         let lastGuess = guesses[guesses.length - 1]
 
         if (event.key === "Enter") {
-            if (lastGuess?.length === 5) {
+            if (lastGuess?.length === props.wordLength) {
                 setGuesses([...guesses, ""])
             }
         } else if (event.key === "Backspace") {
@@ -42,7 +42,7 @@ function WordleManager(props: WordleManagerProps) {
         } else {
             if (lastGuess === undefined) {
                 setGuesses([...guesses, event.key])
-            } else if (lastGuess.length === 5) {
+            } else if (lastGuess.length === props.wordLength) {
                 return
             } else {
                 lastGuess += event.key

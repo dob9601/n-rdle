@@ -1,8 +1,7 @@
 import seedrandom from "seedrandom"
 
-const PRNG_SEED = Math.round(
-    (new Date(2022, 2, 27).getTime() - new Date().getTime()) / (1000 * 3600 * 24)
-)
+
+const PRNG_SEED = new Date().toISOString().split("T")[0]
 const PRNG = seedrandom(PRNG_SEED.toString())
 
 export const getRandomInteger = (min: number, max:number): number => {

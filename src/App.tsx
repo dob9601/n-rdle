@@ -5,13 +5,20 @@ import "./App.css"
 import Keyboard from "./components/Keyboard"
 import {qwertyLayout} from "./layouts"
 import WordleManager from "./components/WordleManager"
+import {NUMERICAL_PREFIXES} from "./numericalSubdomains"
+
+const subdomain: string = window.location.host.split(".")[0]
+
+let WORDLE_COUNT = 2
+if (subdomain in NUMERICAL_PREFIXES) {
+    WORDLE_COUNT = NUMERICAL_PREFIXES[subdomain]
+}
 
 const WORD_LENGTH = 5
-const WORDLE_COUNT = 2
-const MAX_GUESSES = 10
+const MAX_GUESSES = Math.round((WORDLE_COUNT + 5) * (WORD_LENGTH / 5))
 
 const loadWords = async (props: any): Promise<string[]> => {
-    const file = await fetch(`/words/${props.word_length}.txt`)
+    const file = await fetch(`/words/${props.wordLength}.txt`)
     const data = await file.text()
 
     return data.split("\n")
@@ -24,7 +31,7 @@ export const DictContext = React.createContext<string[]>([])
 function App() {
     return (
         <div className="App">
-            <Async promiseFn={loadWords} word_length={5}>
+            <Async promiseFn={loadWords} wordLength={WORD_LENGTH}>
                 <Async.Pending>
                     <p>Loading words!</p>
                 </Async.Pending>
