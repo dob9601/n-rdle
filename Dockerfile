@@ -1,4 +1,4 @@
-FROM node:buster
+FROM node:17-alpine3.14
 
 COPY . /build/ordle
 
