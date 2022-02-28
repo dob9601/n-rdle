@@ -43,9 +43,14 @@ jobs:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
           ls
-          scp -o StrictHostKeyChecking=no ordle.tar.gz ordle@${{ secrets.SSH_DEPLOY_HOST }}:/home/ordle/ordle-.tar.gz
+          scp -o StrictHostKeyChecking=no ordle.tar.gz ordle@${{ secrets.SSH_DEPLOY_HOST }}:/home/ordle/ordle.tar.gz
 
       - name: Kill existing ordle service and restart new one
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-        run: ssh -o StrictHostKeyChecking=no ordle@${{ secrets.SSH_DEPLOY_HOST }} "docker load ordle-.tar.gz"
+        run: |
+          ssh -o StrictHostKeyChecking=no ordle@${{ secrets.SSH_DEPLOY_HOST }} << EOF \
+          docker load ordle.tar.gz \
+          docker kill ordle || true \
+          docker run --detach --publish 127.0.0.1:3000:3000 --restart always ordle 
+          EOF
