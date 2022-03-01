@@ -4,12 +4,12 @@
   justify-content: center;
   flex-wrap: wrap;
   overflow-y: scroll;
-  height: 80vh;
+  height: 70vh;
   align-self: baseline;
 }
 
 .KeyboardContainer {
-  height: 20vh;
+  height: 30vh;
   display: flex;
   align-items: center;
   justify-content: center;

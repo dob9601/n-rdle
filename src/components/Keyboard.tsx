@@ -19,7 +19,7 @@ function Keyboard(props: KeyboardProps) {
                 return (
                     <div key={i} className="keyboardRow">
                         {
-                            i === props.layout.length - 1 ? <KeyboardLetter key="⏎" style={{width: "60px"}} letter = "⏎" action = "Enter" keypressCallback = {keypressCallback} /> : undefined
+                            i === props.layout.length - 1 ? <KeyboardLetter key="⏎" style={{width: "50px"}} letter = "⏎" action = "Enter" keypressCallback = {keypressCallback} /> : undefined
                         }
                         {
                             row.map((char, j) => {
@@ -27,7 +27,7 @@ function Keyboard(props: KeyboardProps) {
                             })
                         }
                         {
-                            i === props.layout.length - 1 ? <KeyboardLetter key="Backspace" style={{fontSize: "1.3em", width: "60px"}} letter = "⌫" action = "Backspace" keypressCallback = {keypressCallback} /> : undefined
+                            i === props.layout.length - 1 ? <KeyboardLetter key="Backspace" style={{fontSize: "1.3em", width: "50px"}} letter = "⌫" action = "Backspace" keypressCallback = {keypressCallback} /> : undefined
                         }
                     </div>
                 )
