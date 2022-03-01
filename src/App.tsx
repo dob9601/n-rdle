@@ -23,28 +23,45 @@ ReactModal.setAppElement("#root")
 export const DictContext = React.createContext<string[]>([])
 
 function App() {
-    return (
-        <div className="App">
-            <Async promiseFn={loadWords} wordLength={wordLength}>
-                <Async.Pending>
-                    <p>Loading words!</p>
-                </Async.Pending>
-                <Async.Rejected>
-                    <p>Failed to load words :( Please try reloading the page</p>
-                </Async.Rejected>
-                <Async.Fulfilled>{(data: string[]) => {
-                    return (
-                        <DictContext.Provider value={data}>
-                            <WordleManager wordleCount={wordleCount} wordLength={wordLength} maxGuesses={MAX_GUESSES} />
-                            <div className="KeyboardContainer">
-                                <Keyboard layout={qwertyLayout} />
-                            </div>
-                        </DictContext.Provider>
-                    )}}
-                </Async.Fulfilled>
-            </Async>
-        </div>
-    )
+    if (window.location.hostname.split(".")[0] === "localhost") {
+        return (
+            <>
+                <h1>Ordle</h1>
+                <p>Ordle is wordle, but procedurally generated!</p>
+                <h2>How does it work?</h2>
+                <ul>
+                    <li>Navigate to a numeric subdomain to get that number of wordles</li>
+                    <li>Wordles above size 500 aren{"'"}t recommended unless you have a beefy machine</li>
+                    <li>Adding /{"<"}number{">"} to the end of the url will customise the word length. For example, <a href="https://w.ordle.xyz/8">w.ordle.xyz/8</a></li>
+                    <li>Certain numeral prefixes are also supported, for example <a href="https://w.ordle.xyz">w.ordle.xyz</a>, <a href="https://qu.ordle.xyz">qu.ordle.xyz</a>, <a href="https://">cent.ordle.xyz</a></li>
+                </ul>
+            </>
+        )
+    } else {
+        return (
+            <div className="App">
+                <Async promiseFn={loadWords} wordLength={wordLength}>
+                    <Async.Pending>
+                        <p>Loading words!</p>
+                    </Async.Pending>
+                    <Async.Rejected>
+                        <p>Failed to load words :( Please try reloading the page</p>
+                    </Async.Rejected>
+                    <Async.Fulfilled>{(data: string[]) => {
+                        return (
+                            <DictContext.Provider value={data}>
+                                <WordleManager wordleCount={wordleCount} wordLength={wordLength} maxGuesses={MAX_GUESSES} />
+                                <div className="KeyboardContainer">
+                                    <Keyboard layout={qwertyLayout} />
+                                </div>
+                            </DictContext.Provider>
+                        )
+                    }}
+                    </Async.Fulfilled>
+                </Async>
+            </div>
+        )
+    }
 }
 
 export default App

@@ -7,4 +7,4 @@ WORKDIR /build/ordle
 RUN yarn install && \
         yarn build
 
-ENTRYPOINT [ "yarn", "serve", "./build" ]
+ENTRYPOINT [ "yarn", "serve", "-s", "build" ]
