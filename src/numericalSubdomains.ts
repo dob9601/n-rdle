@@ -26,46 +26,40 @@ interface ParsedSubdomain {
     wordLength: number
 }
 
-export function parseSubdomains(url: string): ParsedSubdomain {
-    const splitUrl = url.split(".")
+export function parseSubdomains(host: string, path: string): ParsedSubdomain {
+    const splitUrl = host.split(".")
 
-    if (splitUrl.length === 4) {
-        let wordLength = parseInt(splitUrl[0])
-        if (!(3 <= wordLength && wordLength <= 18)) {
+    let wordLength = DEFAULT_WORD_LENGTH
+    let wordleCount = DEFAULT_WORDLE_COUNT
+
+    if (path !== "/") {
+        wordLength = parseInt(path.split("/")[1])
+        if (isNaN(wordLength)) {
             wordLength = DEFAULT_WORD_LENGTH
         }
+    }
 
-        let wordleCount = parseInt(splitUrl[1])
-        if (isNaN(wordleCount)) {
-            if (splitUrl[1] in NUMERICAL_PREFIXES) {
-                wordleCount = NUMERICAL_PREFIXES[splitUrl[1]]
-            } else {
-                wordleCount = DEFAULT_WORDLE_COUNT
-            }
-        }
+    if (splitUrl.length === 3) {
+        const subdomain = splitUrl[0]
 
-        return {
-            wordLength: wordLength,
-            wordleCount: wordleCount
-        }
-    } else if (splitUrl.length === 3) {
-        let wordleCount = parseInt(splitUrl[1])
-        if (isNaN(wordleCount)) {
-            if (splitUrl[1] in NUMERICAL_PREFIXES) {
-                wordleCount = NUMERICAL_PREFIXES[splitUrl[1]]
-            } else {
-                wordleCount = DEFAULT_WORDLE_COUNT
-            }
+        if (subdomain in NUMERICAL_PREFIXES) {
+            wordleCount = NUMERICAL_PREFIXES[subdomain]
+        } else {
+            wordleCount = parseInt(subdomain)
         }
 
-        return {
-            wordLength: DEFAULT_WORD_LENGTH,
-            wordleCount: wordleCount
-        }
-    } else {
-        return {
-            wordLength: DEFAULT_WORD_LENGTH,
-            wordleCount: DEFAULT_WORDLE_COUNT
-        }
+    }
+    // FIXME: Dies at 17+ length
+
+    if (isNaN(wordleCount)) {
+        wordleCount = DEFAULT_WORDLE_COUNT
+    }
+    if (isNaN(wordLength) || wordLength < 3 || wordLength > 18) {
+        wordLength = DEFAULT_WORD_LENGTH // TODO: Complain about bad word length
+    }
+
+    return {
+        wordLength: wordLength,
+        wordleCount: wordleCount
     }
 }

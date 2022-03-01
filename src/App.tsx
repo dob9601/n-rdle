@@ -7,7 +7,7 @@ import {qwertyLayout} from "./layouts"
 import WordleManager from "./components/WordleManager"
 import {parseSubdomains} from "./numericalSubdomains"
 
-const {wordleCount, wordLength} = parseSubdomains(window.location.host)
+const {wordleCount, wordLength} = parseSubdomains(window.location.host, window.location.pathname)
 
 const MAX_GUESSES = Math.round((wordleCount + 5) * (wordLength / 5))
 

@@ -13,9 +13,12 @@ interface WordleProps {
 
 function Wordle(props: WordleProps) {
     const dict = useContext(DictContext)
-    const [correctWord,] = useState(getRandomItemFromArray(dict))
+    const [correctWord, setCorrectWord] = useState("")
+
+    useEffect(() => setCorrectWord(getRandomItemFromArray(dict)), [])
 
     const guesses = useContext(GuessContext)
+
     useEffect(() => {
         if (guesses.slice(0, -1).includes(correctWord) && !props.completed) {
             props.setCompleted()

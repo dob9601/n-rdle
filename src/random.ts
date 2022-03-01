@@ -10,5 +10,5 @@ export const getRandomInteger = (min: number, max:number): number => {
 }
 
 export const getRandomItemFromArray = <T>(array: T[]): T => {
-    return array[getRandomInteger(0, array.length)]
+    return array[getRandomInteger(0, array.length - 1)]
 }

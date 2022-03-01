@@ -17,7 +17,7 @@ interface GuessGridProps {
 function GuessGrid(props: GuessGridProps) {
     const guesses = useContext(GuessContext)
     const rows = []
-    
+
     let correctWordEncountered = false
     for (let i = 0; i < props.maxGuesses; i++) {
         const reveal = i !== guesses.length - 1
