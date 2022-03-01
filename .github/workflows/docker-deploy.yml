@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -15,21 +15,6 @@ jobs:
 
       - name: Dump the docker image to a tarball
         run: docker save -o ordle.tar.gz ordle
-
-      - name: Save the tarball as an artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: ordle-${{ github.sha }}
-          path: ./ordle.tar.gz
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Retrieve the docker tarball
-        uses: actions/download-artifact@v2
-        with:
-          name: ordle-${{ github.sha }}
 
       - name: Setup SSH Keys and known_hosts
         env:
@@ -49,8 +34,8 @@ jobs:
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
-          ssh -o StrictHostKeyChecking=no ordle@${{ secrets.SSH_DEPLOY_HOST }} << EOF \
-          docker load ordle.tar.gz \
-          docker kill ordle || true \
+          ssh -o StrictHostKeyChecking=no ordle@${{ secrets.SSH_DEPLOY_HOST }} << EOF
+          docker load --input ordle.tar.gz
+          docker kill ordle || true
           docker run --detach --publish 127.0.0.1:3000:3000 --restart always ordle 
           EOF
