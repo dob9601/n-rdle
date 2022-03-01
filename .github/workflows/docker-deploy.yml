@@ -27,7 +27,6 @@ jobs:
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
-          ls
           scp -o StrictHostKeyChecking=no ordle.tar.gz ordle@${{ secrets.SSH_DEPLOY_HOST }}:/home/ordle/ordle.tar.gz
 
       - name: Kill existing ordle service and restart new one
