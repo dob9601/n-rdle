@@ -35,6 +35,8 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ordle@${{ secrets.SSH_DEPLOY_HOST }} << EOF
           docker load --input ordle.tar.gz
-          docker kill ordle-production || true
+          docker stop ordle-production || true
+          docker wait ordle-production || true
+          docker rm ordle-production || true
           docker run --name ordle-production --detach --publish 127.0.0.1:3000:3000 --restart always ordle 
           EOF
