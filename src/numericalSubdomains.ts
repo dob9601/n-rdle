@@ -29,7 +29,7 @@ interface ParsedSubdomain {
 export function parseSubdomains(url: string): ParsedSubdomain {
     const splitUrl = url.split(".")
 
-    if (splitUrl.length === 3) {
+    if (splitUrl.length === 4) {
         let wordLength = parseInt(splitUrl[0])
         if (!(3 <= wordLength && wordLength <= 18)) {
             wordLength = DEFAULT_WORD_LENGTH
@@ -48,7 +48,7 @@ export function parseSubdomains(url: string): ParsedSubdomain {
             wordLength: wordLength,
             wordleCount: wordleCount
         }
-    } else if (splitUrl.length === 2) {
+    } else if (splitUrl.length === 3) {
         let wordleCount = parseInt(splitUrl[1])
         if (isNaN(wordleCount)) {
             if (splitUrl[1] in NUMERICAL_PREFIXES) {

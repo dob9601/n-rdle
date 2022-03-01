@@ -9,6 +9,8 @@ import {parseSubdomains} from "./numericalSubdomains"
 
 const {wordleCount, wordLength} = parseSubdomains(window.location.host)
 
+console.log(parseSubdomains("3.du.ordle.xyz"))
+
 const MAX_GUESSES = Math.round((wordleCount + 5) * (wordLength / 5))
 
 const loadWords = async (props: any): Promise<string[]> => {
