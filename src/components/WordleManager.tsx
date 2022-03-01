@@ -1,5 +1,6 @@
-import React, {useState} from "react"
+import React, {useContext, useState} from "react"
 import ReactModal from "react-modal"
+import {DictContext} from "../App"
 import useKeydown from "../hooks/useKeydown"
 import {qwertyLayout} from "../layouts"
 import Wordle from "./Wordle"
@@ -15,6 +16,7 @@ export const GuessContext = React.createContext<string[]>([])
 function WordleManager(props: WordleManagerProps) {
     const [guesses, setGuesses] = useState<string[]>([])
     const [completedWordles, setCompletedWordles] = useState<Set<number>>(new Set())
+    const dictionary = useContext(DictContext)
 
     const setGameCompleted = (gameIndex: number) => {
         const newState = new Set(completedWordles)
@@ -27,7 +29,7 @@ function WordleManager(props: WordleManagerProps) {
         let lastGuess = guesses[guesses.length - 1]
 
         if (event.key === "Enter") {
-            if (lastGuess?.length === props.wordLength) {
+            if (lastGuess?.length === props.wordLength && dictionary.includes(lastGuess)) {
                 setGuesses([...guesses, ""])
             }
         } else if (event.key === "Backspace") {
