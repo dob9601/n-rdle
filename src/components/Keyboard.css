@@ -3,8 +3,8 @@
   color: var(--color-2);
 
   border-radius: 8px;
-  width: 30px;
-  height: 45px;
+  width: 40px;
+  height: 60px;
   margin: 2px;
 
   display: flex;
@@ -12,11 +12,19 @@
   justify-content: center;
 
   font-family: 'Roboto', sans-serif;
-  font-size: 1.8em;
+  font-size: 2em;
   font-weight: 700;
   text-transform: uppercase;
 
   cursor: pointer;
+}
+
+@media only screen and (max-width: 450px) {
+  .KeyboardLetter {
+    width: 30px;
+    height: 45px;
+    font-size: 1.8em;
+  }
 }
 
 .KeyboardLetter p {

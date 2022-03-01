@@ -16,3 +16,13 @@
   border-top: 4px solid var(--color-3);
   box-sizing: border-box;
 }
+
+@media only screen and (max-width: 450px) {
+  .WordleContainer {
+    height: 80vh;
+  }
+
+  .KeyboardContainer {
+    height: 20vh;
+  }
+}
