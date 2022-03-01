@@ -5,17 +5,11 @@ import "./App.css"
 import Keyboard from "./components/Keyboard"
 import {qwertyLayout} from "./layouts"
 import WordleManager from "./components/WordleManager"
-import {NUMERICAL_PREFIXES} from "./numericalSubdomains"
+import {parseSubdomains} from "./numericalSubdomains"
 
-const subdomain: string = window.location.host.split(".")[0]
+const {wordleCount, wordLength} = parseSubdomains(window.location.host)
 
-let WORDLE_COUNT = 2
-if (subdomain in NUMERICAL_PREFIXES) {
-    WORDLE_COUNT = NUMERICAL_PREFIXES[subdomain]
-}
-
-const WORD_LENGTH = 5
-const MAX_GUESSES = Math.round((WORDLE_COUNT + 5) * (WORD_LENGTH / 5))
+const MAX_GUESSES = Math.round((wordleCount + 5) * (wordLength / 5))
 
 const loadWords = async (props: any): Promise<string[]> => {
     const file = await fetch(`/words/${props.wordLength}.txt`)
@@ -31,7 +25,7 @@ export const DictContext = React.createContext<string[]>([])
 function App() {
     return (
         <div className="App">
-            <Async promiseFn={loadWords} wordLength={WORD_LENGTH}>
+            <Async promiseFn={loadWords} wordLength={wordLength}>
                 <Async.Pending>
                     <p>Loading words!</p>
                 </Async.Pending>
@@ -41,7 +35,7 @@ function App() {
                 <Async.Fulfilled>{(data: string[]) => {
                     return (
                         <DictContext.Provider value={data}>
-                            <WordleManager wordleCount={WORDLE_COUNT} wordLength={WORD_LENGTH} maxGuesses={MAX_GUESSES} />
+                            <WordleManager wordleCount={wordleCount} wordLength={wordLength} maxGuesses={MAX_GUESSES} />
                             <div className="KeyboardContainer">
                                 <Keyboard layout={qwertyLayout} />
                             </div>
