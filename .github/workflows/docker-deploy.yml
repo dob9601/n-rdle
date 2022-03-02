@@ -34,7 +34,7 @@ jobs:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
           ssh -o StrictHostKeyChecking=no ordle@${{ secrets.SSH_DEPLOY_HOST }} << EOF
-          set -euf -o pipefail
+          set -euf
 
           docker load --input ordle.tar.gz
           docker stop ordle-production || true
