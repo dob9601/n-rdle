@@ -23,7 +23,7 @@ ReactModal.setAppElement("#root")
 export const DictContext = React.createContext<string[]>([])
 
 function App() {
-    if (window.location.hostname.split(".")[0] === "localhost") {
+    if (window.location.hostname.split(".").length <= 2) {
         return (
             <>
                 <h1>Ordle</h1>
