@@ -1,4 +1,4 @@
-import React from "react"
+import React, {Dispatch, SetStateAction, useState} from "react"
 import {Async} from "react-async"
 import ReactModal from "react-modal"
 import "./App.css"
@@ -22,6 +22,12 @@ ReactModal.setAppElement("#root")
 
 export const DictContext = React.createContext<string[]>([])
 
+interface GuessedLetterContextInterface {
+    guessedLetters: Set<string>,
+    setGuessedLetters: Dispatch<SetStateAction<Set<string>>>
+}
+export const GuessedLetterContext = React.createContext<GuessedLetterContextInterface>({} as GuessedLetterContextInterface)
+
 function App() {
     if (window.location.hostname.split(".").length <= 2) {
         return (
@@ -40,6 +46,8 @@ function App() {
             </div>
         )
     } else {
+        const [guessedLetters, setGuessedLetters] = useState<Set<string>>(new Set())
+
         return (
             <div className="App">
                 <Async promiseFn={loadWords} wordLength={wordLength}>
@@ -51,12 +59,16 @@ function App() {
                     </Async.Rejected>
                     <Async.Fulfilled>{(data: string[]) => {
                         return (
-                            <DictContext.Provider value={data}>
-                                <WordleManager wordleCount={wordleCount} wordLength={wordLength} maxGuesses={MAX_GUESSES} />
-                                <div className="KeyboardContainer">
-                                    <Keyboard layout={qwertyLayout} />
-                                </div>
-                            </DictContext.Provider>
+                            <GuessedLetterContext.Provider value={{guessedLetters: guessedLetters, setGuessedLetters: setGuessedLetters}}>
+                                <DictContext.Provider value={data}>
+                                    <WordleManager wordleCount={wordleCount} wordLength={wordLength} maxGuesses={MAX_GUESSES} />
+                                    <div className="KeyboardContainer">
+                                        <GuessedLetterContext.Consumer>
+                                            {({guessedLetters: letters}) => <Keyboard layout={qwertyLayout} guessedLetters={letters} />}
+                                        </GuessedLetterContext.Consumer>
+                                    </div>
+                                </DictContext.Provider>
+                            </GuessedLetterContext.Provider>
                         )
                     }}
                     </Async.Fulfilled>
