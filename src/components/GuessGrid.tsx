@@ -14,13 +14,23 @@ interface GuessGridProps {
     correctWord: string
 }
 
+const getAllIndexes = (word: string, letter: string): number[] => {
+    const indexes = []
+    for (let i=0; i<word.length; i++) {
+        if (word[i] === letter) {
+            indexes.push(i)
+        }
+    }
+    return indexes
+}
+
 function GuessGrid(props: GuessGridProps) {
     const guesses = useContext(GuessContext)
     const rows = []
 
     let correctWordEncountered = false
     for (let i = 0; i < props.maxGuesses; i++) {
-        const reveal = i !== guesses.length - 1
+        const reveal = i < guesses.length - 1
         const guessRow = <GuessRow key={i} correctWord={props.correctWord} word={correctWordEncountered ? undefined : guesses[i]} reveal={reveal} />
         rows.push(guessRow)
 
@@ -47,24 +57,30 @@ function GuessRowInner(props: GuessRowProps) {
         <div className="GuessRow">
             {
                 [...Array(props.correctWord.length)].map((_, i) => {
-                    const letter = props.word !== undefined ? props.word[i] : undefined
-
-                    if (letter !== undefined) {
-                        let state
+                    if (props.word !== undefined) {
+                        const word = props.word
+                        const letter = props.word[i]
 
                         if (!props.reveal) {
-                            state = LetterState.Unconfirmed
-                        } else if (letter === props.correctWord[i]) {
-                            state = LetterState.Correct
-                        } else if (props.correctWord.includes(letter)) {
-                            state = LetterState.Almost // TODO: Handle repeated letters
-                        } else {
-                            state = LetterState.Incorrect
+                            return <GuessLetter key={i} letter={letter} state={LetterState.Unconfirmed} />
+                        } else if (props.correctWord[i] === letter) {
+                            return <GuessLetter key={i} letter={letter} state={LetterState.Correct} />
                         }
 
-                        return <GuessLetter key={i} letter={letter} state={state} />
+                        const correctIndexes = getAllIndexes(props.correctWord, letter)
+
+                        if (correctIndexes.every((index) => word[index] === letter)) {
+                            // If every occurrence of letter is already matched, new one is incorrect
+                            return <GuessLetter key={i} letter={letter} state={LetterState.Incorrect} />
+                        } else if (correctIndexes.length > 0){
+                            // If there exists an occurrence of this letter that isn't matched then almost
+                            return <GuessLetter key={i} letter={letter} state={LetterState.Almost} />
+                        } else {
+                            // If no occurrence of letter, then incorrect
+                            return <GuessLetter key={i} letter={letter} state={LetterState.Incorrect} />
+                        }
                     } else {
-                        return <GuessLetter key={i} letter={letter} state={LetterState.Unconfirmed} />
+                        return <GuessLetter key={i} letter={undefined} state={LetterState.Unconfirmed} />
                     }
                 })
             }
