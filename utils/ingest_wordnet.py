@@ -2,8 +2,9 @@ import argparse
 import os
 from typing import DefaultDict, TextIO
 
+from utils.ingest import is_word_valid
+
 TARGET_FILES = ['data.adj', 'data.adv', 'data.verb', 'data.noun']
-INVALID_SUBSTRINGS = ['_', '.', '-']
 
 
 def parse_args() -> argparse.Namespace:
@@ -23,12 +24,6 @@ def parse_args() -> argparse.Namespace:
         required=False
     )
     return parser.parse_args()
-
-
-def is_word_valid(word: str) -> bool:
-    if any(invalid_substr in word for invalid_substr in INVALID_SUBSTRINGS):
-        return False
-    return True
 
 
 def parse_wordnet_file(file: TextIO) -> dict[int, list[str]]:
