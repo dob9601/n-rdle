@@ -1,8 +1,4 @@
-import seedrandom from "seedrandom"
-
-
-const PRNG_SEED = new Date().toISOString().split("T")[0] // TODO: Should also include size and word length
-const PRNG = seedrandom(PRNG_SEED.toString())
+import {PRNG} from "./App"
 
 export const getRandomInteger = (min: number, max:number): number => {
     const range = max - min
