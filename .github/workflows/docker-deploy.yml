@@ -41,20 +41,20 @@ jobs:
           ssh -o StrictHostKeyChecking=no ordle@${{ secrets.SSH_DEPLOY_HOST }} << EOF
           set -euf
 
-          echo "Forcefully removing old Ordle image"
+          echo "-> Forcefully removing old Ordle image"
           docker image rm ordle --force
 
-          echo "Loading new version of Ordle"
+          echo "-> Loading new version of Ordle"
           docker load --input ordle.tar.gz
 
-          echo "Stopping old Ordle container"
+          echo "-> Stopping old Ordle container"
           docker stop ordle-production || true
 
-          echo "Removing old Ordle container"
+          echo "-> Removing old Ordle container"
           docker rm ordle-production || true
 
-          echo "Running new Ordle container"
+          echo "-> Running new Ordle container"
           docker run --name ordle-production --detach --publish 127.0.0.1:3000:3000 --restart always ordle 
 
-          echo "Done!"
+          echo "-> Done!"
           EOF
