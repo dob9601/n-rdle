@@ -8,6 +8,7 @@ import WordleManager from "./components/WordleManager"
 import {parseSubdomains} from "./numericalSubdomains"
 import seedrandom from "seedrandom"
 import {FrontPage} from "./components/FrontPage"
+import {Navbar} from "./components/Navbar"
 
 const {wordleCount, wordLength} = parseSubdomains(window.location.host, window.location.pathname)
 
@@ -53,16 +54,19 @@ function App() {
                     </Async.Rejected>
                     <Async.Fulfilled>{(data: string[]) => {
                         return (
-                            <GuessedLetterContext.Provider value={{guessedLetters: guessedLetters, setGuessedLetters: setGuessedLetters}}>
-                                <DictContext.Provider value={data}>
-                                    <WordleManager wordleCount={wordleCount} wordLength={wordLength} maxGuesses={MAX_GUESSES} />
-                                    <div className="KeyboardContainer">
-                                        <GuessedLetterContext.Consumer>
-                                            {({guessedLetters: letters}) => <Keyboard layout={qwertyLayout} guessedLetters={letters} />}
-                                        </GuessedLetterContext.Consumer>
-                                    </div>
-                                </DictContext.Provider>
-                            </GuessedLetterContext.Provider>
+                            <>
+                                <Navbar wordleCount={wordleCount} wordLength={wordLength} />
+                                <GuessedLetterContext.Provider value={{guessedLetters: guessedLetters, setGuessedLetters: setGuessedLetters}}>
+                                    <DictContext.Provider value={data}>
+                                        <WordleManager wordleCount={wordleCount} wordLength={wordLength} maxGuesses={MAX_GUESSES} />
+                                        <div className="KeyboardContainer">
+                                            <GuessedLetterContext.Consumer>
+                                                {({guessedLetters: letters}) => <Keyboard layout={qwertyLayout} guessedLetters={letters} />}
+                                            </GuessedLetterContext.Consumer>
+                                        </div>
+                                    </DictContext.Provider>
+                                </GuessedLetterContext.Provider>
+                            </>
                         )
                     }}
                     </Async.Fulfilled>

@@ -1,0 +1,11 @@
+.Navbar {
+  display: flex;
+  align-items: center;
+  height: 70px;
+  border-bottom: 4px solid var(--color-3)
+}
+
+.Navbar h1,
+.Navbar h2 {
+  margin: 10px;
+}
